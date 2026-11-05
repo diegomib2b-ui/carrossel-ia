@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carrossel IA</title>
+<style>
+:root{--bg:#0d0b18;--card:#17142a;--borda:#2a2545;--txt:#f3f1ff;--sub:#9d97bd;--roxo:#7b5cff;--amarelo:#ffe95c;--grad:linear-gradient(90deg,#ff8a3d,#c84fd6,#7b5cff)}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--borda);position:sticky;top:0;background:rgba(13,11,24,.92);backdrop-filter:blur(8px);z-index:5}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.5px}.logo i{color:var(--roxo);font-style:normal}
+.cred{background:var(--card);border:1px solid var(--borda);padding:8px 14px;border-radius:99px;font-size:14px}
+.cred b{color:var(--amarelo)}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--borda);padding:6px;border-radius:99px;max-width:100%;width:fit-content;margin-bottom:24px;overflow-x:auto;scrollbar-width:none}
+.tabs button{white-space:nowrap;flex:0 0 auto;background:none;border:1px solid transparent;color:var(--sub);padding:10px 20px;border-radius:99px;font:inherit;font-size:15px;cursor:pointer}
+.tabs button.on{background:#272154;border-color:var(--roxo);color:#cfc4ff}
+.card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:22px;margin-bottom:20px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+h2{font-size:20px;margin-bottom:4px}.muted{color:var(--sub);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:18px}
+label{display:block;font-size:13px;color:var(--sub);margin-bottom:6px}
+input,select,textarea{width:100%;background:#0f0d1d;border:1px solid var(--borda);color:var(--txt);border-radius:12px;padding:12px;font:inherit;font-size:15px}
+textarea{min-height:90px;resize:vertical}
+input[type=color]{padding:4px;height:46px}
+.btn{text-decoration:none;display:inline-block;text-align:center;border:0;border-radius:99px;padding:14px 26px;font:inherit;font-weight:600;font-size:16px;cursor:pointer;color:#fff;background:var(--grad)}
+.btn.sec{background:#272154;border:1px solid var(--roxo)}
+.btn:disabled{opacity:.5;cursor:wait}
+.acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.slides{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}
+.slide{flex:0 0 260px;scroll-snap-align:start}
+.slide img{width:100%;border-radius:12px;border:1px solid var(--borda);display:block}
+.slide input,.slide textarea{margin-top:8px;font-size:13px;padding:8px}
+.slide textarea{min-height:70px}
+.check{display:flex;gap:8px;align-items:center;font-size:15px;color:var(--txt)}
+.check input{width:auto}
+video{width:100%;max-width:360px;border-radius:14px;margin-top:16px;background:#000}
+.status{padding:12px 14px;border-radius:12px;background:#0f0d1d;border:1px solid var(--borda);font-size:14px;margin-top:14px;white-space:pre-wrap}
+.erro{border-color:#ff5c7a;color:#ffb3c1}
+.hist{width:100%;border-collapse:collapse;font-size:14px}
+.hist td,.hist th{padding:10px 8px;border-bottom:1px solid var(--borda);text-align:left}
+.tag{padding:3px 10px;border-radius:99px;font-size:12px;background:#272154}
+.teste{border-style:dashed}
+.pill{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;margin-right:6px;background:#0f0d1d;border:1px solid var(--borda)}
+.ok{color:#6be59a}.off{color:var(--amarelo)}
+.hide{display:none}
+@media(max-width:600px){main{padding:16px 14px 50px}.card{padding:16px}.slide{flex-basis:72vw}.tabs button{padding:9px 14px}.btn{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="logo">Carrossel<i>.</i>IA</div><div class="cred"><b id="cred">–</b> créditos</div></header>
+<main>
+  <div class="tabs">
+    <button data-tab="carrossel" class="on">Carrossel</button>
+    <button data-tab="video">Edição</button>
+    <button data-tab="historico">Histórico</button>
+    <button data-tab="teste">Painel de teste</button>
+  </div>
+
+  <section id="carrossel">
+    <div class="card">
+      <h2>Gerar carrossel</h2><p class="muted">Escreva o tema e a IA monta os slides prontos para postar. Custa 1 crédito.</p>
+      <div class="grid">
+        <div style="grid-column:1/-1"><label>Tema</label><input id="tema" placeholder="Ex.: 5 erros ao abrir um restaurante"></div>
+        <div><label>Nicho</label><input id="nicho" placeholder="Gastronomia"></div>
+        <div><label>Tom</label><select id="tom"><option>direto</option><option>inspirador</option><option>polêmico</option><option>educativo</option><option>divertido</option></select></div>
+        <div><label>Nº de slides</label><input id="qtd" type="number" min="3" max="10" value="6"></div>
+        <div><label>Visual</label><select id="template"></select></div>
+        <div><label>Cor de destaque</label><input id="cor" type="color" value="#ffe95c"></div>
+        <div><label>@ do perfil</label><input id="handle" value="@seuperfil"></div>
+      </div>
+      <div class="acoes"><button class="btn" id="gerar">Gerar carrossel →</button><span class="muted" id="cmsg"></span></div>
+    </div>
+    <div class="card hide" id="resultado">
+      <h2>Seu carrossel</h2><p class="muted">Ajuste os textos ou o visual e clique em "Atualizar" (grátis, não usa crédito).</p>
+      <div class="slides" id="slides"></div>
+      <label style="margin-top:10px">Legenda do post</label><textarea id="legenda"></textarea>
+      <div class="acoes">
+        <select id="template2" style="width:auto"></select>
+        <button class="btn sec" id="rerender">Atualizar slides</button>
+        <a class="btn" id="zip" href="#">Baixar ZIP</a>
+        <button class="btn sec" id="copiar">Copiar legenda</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="video" class="hide">
+    <div class="card">
+      <h2>Editar vídeo</h2><p class="muted">Envie sua gravação: cortamos os silêncios e colocamos legenda estilo Reels. Custa 3 créditos.</p>
+      <div class="grid">
+        <div style="grid-column:1/-1"><label>Vídeo (vertical, até 200 MB)</label><input type="file" id="arquivo" accept="video/*"></div>
+        <div style="grid-column:1/-1"><label>Roteiro (opcional — usado na legenda quando a transcrição automática está desligada)</label><textarea id="roteiro" placeholder="Cole aqui o texto que você falou no vídeo"></textarea></div>
+        <div class="check"><input type="checkbox" id="silencio" checked><span>Cortar silêncios</span></div>
+        <div class="check"><input type="checkbox" id="leg" checked><span>Legendas automáticas</span></div>
+        <div><label>Cor da palavra ativa</label><input type="color" id="corv" value="#ffe95c"></div>
+      </div>
+      <div class="acoes"><button class="btn" id="editar">Editar vídeo →</button></div>
+      <div id="vstatus" class="status hide"></div>
+      <video id="player" controls class="hide" playsinline></video>
+      <div class="acoes hide" id="vacoes"><a class="btn" id="vbaixar" download>Baixar vídeo</a></div>
+    </div>
+  </section>
+
+  <section id="historico" class="hide">
+    <div class="card"><h2>Histórico</h2><p class="muted">Últimas gerações, créditos e custo estimado de API.</p>
+      <div style="overflow-x:auto;margin-top:14px"><table class="hist"><thead><tr><th>Quando</th><th>Tipo</th><th>Status</th><th>Créditos</th><th>Custo API</th><th></th></tr></thead><tbody id="hbody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="teste" class="hide">
+    <div class="card teste">
+      <h2>Painel de teste</h2><p class="muted">Ferramentas para testar o fluxo inteiro clicando.</p>
+      <div style="margin-top:14px" id="integ"></div>
+      <div class="acoes">
+        <button class="btn sec" id="reset">Resetar créditos (50)</button>
+        <button class="btn sec" id="exemplo">Gerar carrossel de exemplo</button>
+        <button class="btn sec" id="zerar">Simular créditos insuficientes</button>
+      </div>
+      <div id="tstatus" class="status hide"></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let atual = null;
+
+async function api(url, opt = {}) {
+  const r = await fetch(url, opt.body && !(opt.body instanceof FormData) ? { ...opt, headers: { 'content-type': 'application/json' }, body: JSON.stringify(opt.body) } : opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.erro || `Erro ${r.status}`);
+  return j;
+}
+async function carregarMe() {
+  const me = await api('/api/me');
+  $('cred').textContent = me.creditos;
+  const ops = me.templates.map(t => `<option>${t}</option>`).join('');
+  if (!$('template').options.length) { $('template').innerHTML = ops; $('template2').innerHTML = ops; }
+  $('integ').innerHTML = `<span class="pill ${me.ia ? 'ok' : 'off'}">IA texto: ${me.ia ? 'Claude' : 'modo demo'}</span><span class="pill ${me.whisper ? 'ok' : 'off'}">Transcrição: ${me.whisper ? 'Whisper' : 'via roteiro'}</span>`;
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  ['carrossel', 'video', 'historico', 'teste'].forEach(s => $(s).classList.toggle('hide', s !== b.dataset.tab));
+  if (b.dataset.tab === 'historico') carregarHist();
+});
+
+function mostrarCarrossel(g) {
+  atual = g;
+  $('resultado').classList.remove('hide');
+  $('slides').innerHTML = g.dados.slides.map((s, i) => `<div class="slide"><img src="${g.urls[i]}" alt="Slide ${i + 1}">
+    <input data-i="${i}" data-k="titulo" value="${s.titulo.replace(/"/g, '&quot;')}"><textarea data-i="${i}" data-k="texto">${s.texto}</textarea></div>`).join('');
+  $('legenda').value = g.dados.legenda || '';
+  $('template2').value = g.dados.opts.template;
+  $('zip').href = g.zip;
+}
+async function gerar(body) {
+  $('gerar').disabled = true; $('cmsg').textContent = 'Gerando…';
+  try {
+    const g = await api('/api/carrossel', { method: 'POST', body });
+    mostrarCarrossel(g); $('cmsg').textContent = ''; $('cred').textContent = g.saldo;
+    $('resultado').scrollIntoView({ behavior: 'smooth' });
+    return g;
+  } catch (e) { $('cmsg').textContent = '⚠ ' + e.message; throw e; }
+  finally { $('gerar').disabled = false; }
+}
+$('gerar').onclick = () => gerar({ tema: $('tema').value, nicho: $('nicho').value, tom: $('tom').value, qtd: $('qtd').value, template: $('template').value, cor: $('cor').value, handle: $('handle').value }).catch(() => {});
+$('rerender').onclick = async () => {
+  const slides = atual.dados.slides.map(s => ({ ...s }));
+  document.querySelectorAll('#slides [data-i]').forEach(el => slides[el.dataset.i][el.dataset.k] = el.value);
+  $('rerender').disabled = true;
+  try { mostrarCarrossel(await api(`/api/carrossel/${atual.id}/rerender`, { method: 'POST', body: { slides, opts: { template: $('template2').value } } })); }
+  catch (e) { alert(e.message); } finally { $('rerender').disabled = false; }
+};
+$('copiar').onclick = () => navigator.clipboard.writeText($('legenda').value).then(() => $('copiar').textContent = 'Copiada ✓');
+
+$('editar').onclick = async () => {
+  const f = $('arquivo').files[0]; if (!f) return alert('Escolha um vídeo');
+  const fd = new FormData();
+  fd.append('video', f); fd.append('roteiro', $('roteiro').value); fd.append('cor', $('corv').value);
+  fd.append('cortarSilencio', $('silencio').checked); fd.append('legendas', $('leg').checked);
+  const st = $('vstatus'); st.className = 'status'; st.textContent = 'Enviando…';
+  $('player').classList.add('hide'); $('vacoes').classList.add('hide'); $('editar').disabled = true;
+  try {
+    const g = await api('/api/video', { method: 'POST', body: fd });
+    $('cred').textContent = g.saldo; st.textContent = 'Processando (corte + legenda)…';
+    const poll = async () => {
+      const x = await api('/api/geracoes/' + g.id);
+      if (x.status === 'processando') return setTimeout(poll, 1500);
+      $('editar').disabled = false; carregarMe();
+      if (x.status === 'erro') { st.className = 'status erro'; st.textContent = '⚠ ' + x.erro + '\n(créditos devolvidos)'; return; }
+      const l = x.dados.log;
+      st.textContent = `Pronto ✓  ${l.duracao_original}s → ${l.duracao_final}s (−${l.segundos_removidos}s de silêncio) · legenda: ${l.transcricao || 'desligada'}${l.palavras ? ` (${l.palavras} palavras)` : ''}`;
+      $('player').src = x.dados.url; $('player').classList.remove('hide');
+      $('vbaixar').href = x.dados.url; $('vacoes').classList.remove('hide');
+    };
+    poll();
+  } catch (e) { st.className = 'status erro'; st.textContent = '⚠ ' + e.message; $('editar').disabled = false; }
+};
+
+async function carregarHist() {
+  const h = await api('/api/historico');
+  $('hbody').innerHTML = h.map(g => `<tr><td>${new Date(g.criado_em).toLocaleString('pt-BR')}</td><td><span class="tag">${g.tipo}</span></td><td>${g.status}</td><td>${g.creditos}</td><td>US$ ${(g.custo_usd || 0).toFixed(4)}</td>
+    <td>${g.tipo === 'carrossel' ? `<a href="/api/carrossel/${g.id}/zip" style="color:#cfc4ff">ZIP</a>` : g.dados.url ? `<a href="${g.dados.url}" style="color:#cfc4ff">vídeo</a>` : ''}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nada ainda.</td></tr>';
+}
+
+const tlog = t => { $('tstatus').className = 'status'; $('tstatus').textContent = t; };
+$('reset').onclick = async () => { const u = await api('/api/creditos/reset', { method: 'POST' }); $('cred').textContent = u.creditos; tlog('Créditos resetados para ' + u.creditos); };
+$('exemplo').onclick = async () => {
+  tlog('Gerando exemplo…');
+  try { const g = await gerar({ tema: 'abrir um restaurante', nicho: 'Gastronomia', tom: 'direto', qtd: 5, template: 'escuro', cor: '#ffe95c', handle: '@michalis' });
+    tlog(`OK: ${g.dados.slides.length} slides (fonte: ${g.dados.fonte}). Veja na aba Carrossel.`); } catch (e) { tlog('Erro: ' + e.message); }
+};
+$('zerar').onclick = async () => {
+  let n = 0; tlog('Gastando créditos…');
+  try { while (n < 60) { await api('/api/carrossel', { method: 'POST', body: { tema: 'teste', qtd: 3 } }); n++; } }
+  catch (e) { tlog(`Depois de ${n} gerações: "${e.message}" ✓ bloqueio funcionando`); carregarMe(); }
+};
+carregarMe();
+</script>
+</body>
+</html>

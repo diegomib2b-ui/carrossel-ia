@@ -4,7 +4,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+// Em produção (Railway) aponte DATA_DIR para o volume persistente, ex.: /app/data
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
 fs.mkdirSync(path.join(DATA_DIR, 'out'), { recursive: true });
 
 // Preço em créditos de cada ação (custo real de API registrado no Histórico)

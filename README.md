@@ -67,3 +67,9 @@ O custo de API de cada geração é registrado no log `[custo]` e aparece no His
 - **Planos:** Start R$97/150 cr · Pro R$147/300 · Ultra R$247/500 (editáveis na tabela `planos`). Assinatura mensal no cartão via Mercado Pago (preapproval) + webhook `/api/webhooks/mercadopago`.
 - **Preço em créditos:** carrossel 2 · edição 5 · avatar 45/min (mín. 10) · avatar extra 30 · roteiro grátis.
 - **Sem chaves:** roda local com usuário demo; o Painel de teste simula o pagamento.
+
+## Deploy (Railway)
+- Build pelo `Dockerfile` (Node 22 + FFmpeg + Chromium + fontes Inter/JetBrains Mono). Checagem de saúde em `/saude`.
+- Criar um **Volume** montado em `/app/data` (guarda vídeos, slides e avatares entre deploys). Uma instância só enquanto os arquivos estiverem no volume.
+- Variáveis: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `ANTHROPIC_API_KEY`, `ELEVENLABS_API_KEY`, `FAL_KEY`, `APP_URL` (link público), e depois `MP_ACCESS_TOKEN` / `MP_WEBHOOK_SECRET`.
+- Webhook do Mercado Pago: `{APP_URL}/api/webhooks/mercadopago`.

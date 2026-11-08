@@ -33,6 +33,8 @@ app.use('/avatares', express.static(AV));
 app.use('/arquivos-marca', express.static(path.join(store.DATA_DIR, 'marcas')));
 
 // ================= Públicas =================
+// Checagem de saúde (o Railway chama para saber se o app subiu)
+app.get('/saude', (req, res) => res.json({ ok: true, dados: store.modo, pagamento: pagamento.ativo() ? 'mercadopago' : 'demo' }));
 app.get('/api/config', (req, res) => res.json({ login: auth.ativo, pagamento: pagamento.ativo() ? 'mercadopago' : 'demo' }));
 app.get('/api/planos', rota(async (req, res) => res.json(await store.planos())));
 app.post('/api/auth/cadastro', rota(async (req, res) => res.json(await auth.cadastrar(req.body || {}))));

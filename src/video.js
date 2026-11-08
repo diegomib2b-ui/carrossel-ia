@@ -76,6 +76,7 @@ const tempo = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 6
 const hexAss = hex => { const h = hex.replace('#', ''); return `&H00${h.slice(4, 6)}${h.slice(2, 4)}${h.slice(0, 2)}`.toUpperCase(); };
 
 function gerarASS(palavras, { w, h, cor = '#c6ff3d', porBloco = 3 }) {
+  cor = require('./cor').corLegivelEmVideo(cor);
   const fs_ = Math.round(h * 0.047);
   const head = `[Script Info]\nScriptType: v4.00+\nPlayResX: ${w}\nPlayResY: ${h}\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Reels,Inter,${fs_},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,${Math.round(fs_ / 9)},2,2,60,60,${Math.round(h * 0.22)},1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
   const linhas = [];

@@ -131,6 +131,7 @@ function assCaixa(palavras, porBloco = 3) {
 
 // Estilo "Dados": quando o avatar fala um número, ele aparece gigante no topo
 function eventosNumeros(palavras, cor) {
+  cor = require('./cor').corLegivelEmVideo(cor);
   const ev = [];
   palavras.forEach((p, i) => {
     if (!/\d/.test(p.w)) return;

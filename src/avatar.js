@@ -98,9 +98,10 @@ async function lipsyncFal(fotoPath, audioPath) {
     await new Promise(ok => setTimeout(ok, 3000));
     const s = await (await fetch(status_url, { headers: auth })).json();
     if (s.status === 'COMPLETED') break;
-    if (s.status === 'FAILED' || s.error) throw new Error('fal.ai falhou: ' + JSON.stringify(s).slice(0, 300));
+    if (s.status === 'FAILED' || s.error || s.detail) throw new Error('fal.ai falhou: ' + JSON.stringify(s).slice(0, 300));
   }
   const res = await (await fetch(response_url, { headers: auth })).json();
+  if (res.detail) throw new Error('fal.ai: ' + JSON.stringify(res.detail).slice(0, 300));
   const url = res.video?.url;
   if (!url) throw new Error('fal.ai não devolveu vídeo: ' + JSON.stringify(res).slice(0, 300));
   const v = await fetch(url);

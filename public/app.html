@@ -75,30 +75,50 @@ audio{width:100%;margin-top:12px}
 .conta{font-size:13px;color:var(--sub);text-align:right;margin-top:4px}
 .hide{display:none}
 @media(max-width:600px){main{padding:16px 14px 50px}.card{padding:16px}.slide{flex-basis:72vw}.tabs button{padding:9px 14px}.btn{width:100%}}
+.user{display:flex;align-items:center;gap:10px}
+.plano-tag{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:1px;padding:5px 10px;border-radius:99px;border:1px solid var(--limaBorda);color:var(--lima);background:var(--limaEsc);text-transform:uppercase}
+.sair{background:none;border:0;color:var(--sub);font:inherit;font-size:14px;cursor:pointer}.sair:hover{color:var(--txt)}
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.plano{border:1px solid var(--borda);border-radius:18px;padding:22px;background:#0f0f12;display:flex;flex-direction:column;gap:12px;position:relative}
+.plano.destaque{border-color:var(--limaBorda);background:linear-gradient(180deg,#151a0b,#0f0f12)}
+.plano.atual{outline:2px solid var(--lima)}
+.plano .selo{position:absolute;top:-11px;left:20px;background:var(--lima);color:#0a0a0c;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px}
+.plano h3{font-size:18px}.preco{font-size:38px;font-weight:900;letter-spacing:-1.5px}.preco small{font-size:14px;color:var(--sub);font-weight:400;letter-spacing:0}
+.plano ul{list-style:none;padding:0;display:grid;gap:7px;font-size:14px;color:#c9c9cf}.plano li:before{content:"✓ ";color:var(--lima)}
+.plano .btn{margin-top:auto;width:100%}
+.marca-box{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;margin-top:18px}
+.marca-box img{width:64px;height:64px;border-radius:16px;object-fit:cover;background:#0f0f12;border:1px solid var(--borda)}
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px}
+.dl div{border:1px solid var(--borda);border-radius:12px;padding:12px 14px;background:#0f0f12}.dl dt{font-size:12px;color:var(--sub);margin-bottom:4px}.dl dd{margin:0;font-size:15px;white-space:pre-wrap}
+.cor-amostra{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid var(--borda)}
+@media(max-width:860px){.planos{grid-template-columns:1fr}.user .nome{display:none}}
+img:not([src]){visibility:hidden}
 </style>
 </head>
 <body>
-<header><a class="logo" href="/" aria-label="deep cut">deep<span class="cut"><span class="ghost">cut</span><span class="a">cut</span><span class="b">cut</span><span class="risco"></span></span></a><div class="cred"><b id="cred">–</b> créditos</div></header>
+<header><a class="logo" href="/" aria-label="deep cut">deep<span class="cut"><span class="ghost">cut</span><span class="a">cut</span><span class="b">cut</span><span class="risco"></span></span></a><div class="user"><span class="plano-tag" id="planoTag">teste</span><div class="cred"><b id="cred">–</b> créditos</div><span class="nome muted" id="userNome"></span><button class="sair" id="sair">Sair</button></div></header>
 <main>
   <div class="tabs">
     <button data-tab="carrossel" class="on">Carrossel</button>
     <button data-tab="avatar">Avatar</button>
     <button data-tab="video">Edição</button>
+    <button data-tab="marca">Marca</button>
+    <button data-tab="planos">Planos</button>
     <button data-tab="historico">Histórico</button>
     <button data-tab="teste">Painel de teste</button>
   </div>
 
   <section id="carrossel">
     <div class="card">
-      <h2>Gerar carrossel</h2><p class="muted">Escreva o tema e a IA monta os slides prontos para postar. Custa 1 crédito.</p>
+      <h2>Gerar carrossel</h2><p class="muted">Escreva o tema e a IA monta os slides prontos para postar. Custa <b class="c-carrossel">2</b> créditos.</p>
       <div class="grid">
         <div style="grid-column:1/-1"><label>Tema</label><input id="tema" placeholder="Ex.: 5 erros ao abrir um restaurante"></div>
         <div><label>Nicho</label><input id="nicho" placeholder="Gastronomia"></div>
-        <div><label>Tom</label><select id="tom"><option>direto</option><option>inspirador</option><option>polêmico</option><option>educativo</option><option>divertido</option></select></div>
+        <div><label>Tom</label><select id="tom"><option value="direto">Direto</option><option value="descontraido">Descontraído</option><option value="tecnico">Técnico</option><option value="inspirador">Inspirador</option><option value="vendedor">Vendedor</option></select></div>
         <div><label>Nº de slides</label><input id="qtd" type="number" min="3" max="10" value="6"></div>
         <div><label>Visual</label><select id="template"></select></div>
         <div><label>Cor de destaque</label><input id="cor" type="color" value="#c6ff3d"></div>
-        <div><label>@ do perfil</label><input id="handle" value="@seuperfil"></div>
+        <div><label>@ do perfil</label><input id="handle" placeholder="@seuperfil"></div>
       </div>
       <div class="acoes"><button class="btn" id="gerar">Gerar carrossel →</button><span class="muted" id="cmsg"></span></div>
     </div>
@@ -161,7 +181,7 @@ audio{width:100%;margin-top:12px}
 
   <section id="video" class="hide">
     <div class="card">
-      <h2>Editar vídeo</h2><p class="muted">Envie sua gravação: cortamos os silêncios e colocamos legenda estilo Reels. Custa 3 créditos.</p>
+      <h2>Editar vídeo</h2><p class="muted">Envie sua gravação: cortamos os silêncios e colocamos legenda estilo Reels. Custa <b class="c-video">5</b> créditos.</p>
       <div class="grid">
         <div style="grid-column:1/-1"><label>Vídeo (vertical, até 200 MB)</label><input type="file" id="arquivo" accept="video/*"></div>
         <div style="grid-column:1/-1"><label>Roteiro (opcional — usado na legenda quando a transcrição automática está desligada)</label><textarea id="roteiro" placeholder="Cole aqui o texto que você falou no vídeo"></textarea></div>
@@ -176,6 +196,24 @@ audio{width:100%;margin-top:12px}
     </div>
   </section>
 
+  <section id="marca" class="hide">
+    <div class="card">
+      <h2>Sua marca</h2><p class="muted">A IA usa esses dados em todo carrossel, roteiro e vídeo.</p>
+      <div class="marca-box"><img id="mLogo" alt=""><div><div style="font-size:20px;font-weight:800" id="mNome">–</div><div class="muted" id="mHandle"></div></div></div>
+      <dl class="dl" id="mDados"></dl>
+      <div class="acoes"><a class="btn sec" href="/boas-vindas">Editar marca</a></div>
+    </div>
+  </section>
+
+  <section id="planos" class="hide">
+    <div class="card">
+      <h2>Planos</h2><p class="muted" id="plSub">Créditos renovam todo mês. Cancele quando quiser.</p>
+      <div class="planos" id="plLista"></div>
+      <p class="muted" style="margin-top:16px">1 carrossel = <b class="c-carrossel">2</b> créditos · vídeo editado = <b class="c-video">5</b> · avatar = <b id="cAvMin">45</b> por minuto</p>
+      <div id="plMsg" class="status hide"></div>
+    </div>
+  </section>
+
   <section id="historico" class="hide">
     <div class="card"><h2>Histórico</h2><p class="muted">Últimas gerações, créditos e custo estimado de API.</p>
       <div style="overflow-x:auto;margin-top:14px"><table class="hist"><thead><tr><th>Quando</th><th>Tipo</th><th>Status</th><th>Créditos</th><th>Custo API</th><th></th></tr></thead><tbody id="hbody"></tbody></table></div>
@@ -187,7 +225,8 @@ audio{width:100%;margin-top:12px}
       <h2>Painel de teste</h2><p class="muted">Ferramentas para testar o fluxo inteiro clicando.</p>
       <div style="margin-top:14px" id="integ"></div>
       <div class="acoes">
-        <button class="btn sec" id="reset">Resetar créditos (50)</button>
+        <button class="btn sec" id="reset">Resetar créditos (30)</button>
+        <button class="btn sec" id="simular">Simular pagamento do plano</button>
         <button class="btn sec" id="exemplo">Gerar carrossel de exemplo</button>
         <button class="btn sec" id="zerar">Simular créditos insuficientes</button>
         <button class="btn sec" id="avteste">Testar avatar de ponta a ponta</button>
@@ -196,19 +235,62 @@ audio{width:100%;margin-top:12px}
     </div>
   </section>
 </main>
+<script src="/js/sessao.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 let atual = null, ME = null, avSel = null, audioAtual = null, estiloSel = 'classico';
 
-async function api(url, opt = {}) {
-  const r = await fetch(url, opt.body && !(opt.body instanceof FormData) ? { ...opt, headers: { 'content-type': 'application/json' }, body: JSON.stringify(opt.body) } : opt);
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j.erro || `Erro ${r.status}`);
-  return j;
+const api = (url, opt) => DC.api(url, opt);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const brl = c => (c / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace(',00', '');
+const TONS = { direto: 'Direto', descontraido: 'Descontraído', tecnico: 'Técnico', inspirador: 'Inspirador', vendedor: 'Vendedor' };
+let marcaPreenchida = false;
+function mostrarMarca(m) {
+  if (!m) return;
+  $('mNome').textContent = m.nome || '–'; $('mHandle').textContent = m.handle || '';
+  if (m.logo_url || m.foto_url) $('mLogo').src = m.logo_url || m.foto_url;
+  const itens = [['Nicho', m.nicho], ['Sobre o negócio', m.descricao], ['Público', m.publico], ['Tom', TONS[m.tom] || m.tom],
+    ['Cor de destaque', m.cor && `<span class="cor-amostra" style="background:${esc(m.cor)}"></span>${esc(m.cor)}`], ['Texto de referência', m.estilo_escrita && (m.estilo_escrita.length > 160 ? m.estilo_escrita.slice(0, 160) + '…' : m.estilo_escrita)]];
+  $('mDados').innerHTML = itens.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${k === 'Cor de destaque' ? v : esc(v)}</dd></div>`).join('');
+  if (!marcaPreenchida) { // preenche os formulários com a marca (o cliente ainda pode trocar)
+    marcaPreenchida = true;
+    if (m.cor) ['cor', 'avcor', 'corv'].forEach(i => $(i).value = m.cor);
+    if (m.handle) $('handle').value = m.handle;
+    if (m.nicho) $('nicho').value = m.nicho;
+    if (m.tom && TONS[m.tom]) $('tom').value = m.tom;
+  }
+}
+function mostrarPlanos(me) {
+  const pop = 'pro';
+  if (me.plano_status === 'ativo') $('plMsg').classList.add('hide');
+  $('planoTag').textContent = me.plano_status === 'ativo' && me.plano ? me.plano : 'teste';
+  $('plSub').textContent = me.plano_status === 'ativo' ? `Seu plano: ${(me.planos.find(p => p.id === me.plano) || {}).nome || me.plano}. Créditos renovam todo mês.` : 'Você está no teste grátis. Escolha um plano para continuar criando.';
+  $('plLista').innerHTML = me.planos.map(p => {
+    const atual = me.plano_status === 'ativo' && me.plano === p.id;
+    return `<div class="plano ${p.id === pop ? 'destaque' : ''} ${atual ? 'atual' : ''}">${p.id === pop ? '<span class="selo">MAIS ESCOLHIDO</span>' : ''}
+      <h3>${esc(p.nome)}</h3><div class="preco">${brl(p.preco_centavos)}<small>/mês</small></div>
+      <ul><li>${p.creditos_mes} créditos por mês</li><li>até ${Math.floor(p.creditos_mes / me.custos.carrossel)} carrosséis</li><li>ou ~${Math.floor(p.creditos_mes / me.custos.avatar_por_min)} min de avatar</li><li>Cartão · sem fidelidade</li></ul>
+      <button class="btn ${p.id === pop ? '' : 'sec'}" data-plano="${p.id}" ${atual ? 'disabled' : ''}>${atual ? 'Plano atual' : 'Assinar ' + esc(p.nome)}</button></div>`;
+  }).join('');
+  document.querySelectorAll('[data-plano]').forEach(b => b.onclick = () => assinar(b.dataset.plano, b));
+}
+async function assinar(plano, b) {
+  b.disabled = true; const m = $('plMsg'); m.className = 'status'; m.textContent = 'Abrindo pagamento…';
+  try {
+    const r = await api('/api/assinar', { method: 'POST', body: { plano } });
+    if (r.demo) { m.textContent = 'Modo de teste (Mercado Pago ainda não configurado): use "Simular pagamento do plano" no Painel de teste.'; b.disabled = false; return; }
+    location.href = r.link;
+  } catch (e) { m.className = 'status erro'; m.textContent = '⚠ ' + e.message; b.disabled = false; }
 }
 async function carregarMe() {
   const me = await api('/api/me');
+  if (!me.onboarding_ok && me.modo === 'supabase') { location.href = '/boas-vindas'; return; }
   $('cred').textContent = me.creditos;
+  $('userNome').textContent = me.nome || me.email;
+  document.querySelectorAll('.c-carrossel').forEach(e => e.textContent = me.custos.carrossel);
+  document.querySelectorAll('.c-video').forEach(e => e.textContent = me.custos.video);
+  $('cAvMin').textContent = me.custos.avatar_por_min;
+  mostrarMarca(me.marca); mostrarPlanos(me);
   const ops = me.templates.map(t => `<option>${t}</option>`).join('');
   if (!$('template').options.length) { $('template').innerHTML = ops; $('template2').innerHTML = ops; }
   $('integ').innerHTML = `<span class="pill ${me.ia ? 'ok' : 'off'}">IA texto: ${me.ia ? 'Claude' : 'modo demo'}</span><span class="pill ${me.whisper ? 'ok' : 'off'}">Transcrição: ${me.whisper ? 'Whisper' : 'via roteiro'}</span><span class="pill ${me.voz ? 'ok' : 'off'}">Voz: ${me.voz ? 'ElevenLabs' : 'demo (mudo)'}</span><span class="pill ${me.lipsync ? 'ok' : 'off'}">Lip-sync: ${me.lipsync ? 'fal.ai' : 'demo (zoom na foto)'}</span>`;
@@ -216,7 +298,7 @@ async function carregarMe() {
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
-  ['carrossel', 'avatar', 'video', 'historico', 'teste'].forEach(s => $(s).classList.toggle('hide', s !== b.dataset.tab));
+  ['carrossel', 'avatar', 'video', 'marca', 'planos', 'historico', 'teste'].forEach(s => $(s).classList.toggle('hide', s !== b.dataset.tab));
   if (b.dataset.tab === 'historico') carregarHist();
   if (b.dataset.tab === 'avatar') carregarAvatares();
 });
@@ -281,7 +363,12 @@ async function carregarHist() {
 }
 
 const tlog = t => { $('tstatus').className = 'status'; $('tstatus').textContent = t; };
-$('reset').onclick = async () => { const u = await api('/api/creditos/reset', { method: 'POST' }); $('cred').textContent = u.creditos; tlog('Créditos resetados para ' + u.creditos); };
+$('reset').onclick = async () => { try { const u = await api('/api/teste/creditos', { method: 'POST', body: { creditos: 30 } }); $('cred').textContent = u.creditos; tlog('Créditos resetados para ' + u.creditos); } catch (e) { tlog('Erro: ' + e.message); } };
+$('simular').onclick = async () => {
+  try { const u = await api('/api/teste/simular-pagamento', { method: 'POST' }); tlog(`Pagamento simulado ✓ plano ${u.plano} ativo, ${u.creditos} créditos`); carregarMe(); }
+  catch (e) { tlog('Erro: ' + e.message + (e.status === 400 ? ' (vá em Planos e clique em Assinar)' : '')); }
+};
+$('sair').onclick = () => DC.sair();
 $('exemplo').onclick = async () => {
   tlog('Gerando exemplo…');
   try { const g = await gerar({ tema: 'abrir um restaurante', nicho: 'Gastronomia', tom: 'direto', qtd: 5, template: 'escuro', cor: '#c6ff3d', handle: '@michalis' });
@@ -289,7 +376,7 @@ $('exemplo').onclick = async () => {
 };
 $('zerar').onclick = async () => {
   let n = 0; tlog('Gastando créditos…');
-  try { while (n < 60) { await api('/api/carrossel', { method: 'POST', body: { tema: 'teste', qtd: 3 } }); n++; } }
+  try { await api('/api/teste/creditos', { method: 'POST', body: { creditos: 3 } }); while (n < 10) { await api('/api/carrossel', { method: 'POST', body: { tema: 'teste', qtd: 3 } }); n++; } }
   catch (e) { tlog(`Depois de ${n} gerações: "${e.message}" ✓ bloqueio funcionando`); carregarMe(); }
 };
 
@@ -389,7 +476,12 @@ $('avteste').onclick = async () => {
     tlog(`OK ✓ vídeo de ${v.dados.duracao}s gerado (${v.creditos} créditos). Veja na aba Avatar.`);
   } catch (e) { tlog('Erro: ' + e.message); }
 };
-carregarMe();
+(async () => {
+  if (!await DC.exigirLogin()) return;
+  await carregarMe();
+  const aba = location.hash.slice(1);
+  const b = aba && document.querySelector(`.tabs [data-tab="${aba}"]`); if (b) b.click();
+})();
 </script>
 </body>
 </html>

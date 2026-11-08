@@ -3,7 +3,7 @@
 Conteúdo sem enrolação: carrossel com IA, Reels com avatar e edição que corta as pausas.
 
 - Site: `http://localhost:3400/`
-- App: `http://localhost:3400/app`
+- App: `http://localhost:3400/app` · Login: `/entrar` · Onboarding: `/boas-vindas`
 - Marca: `public/marca/` (ícone, foto de perfil 1080, logo animado)
 
 ## Identidade
@@ -58,3 +58,12 @@ O custo de API de cada geração é registrado no log `[custo]` e aparece no His
 ## Próximas fases
 2. Postar no Instagram (Graph API, precisa da aprovação de app da Meta)
 4. Respostas automáticas no Direct
+
+## Base do SaaS (Fase 3)
+- **Dados:** Supabase `deep-cut` (sa-east-1): `perfis`, `marcas`, `geracoes`, `avatares`, `audios`, `planos`, `assinaturas`, `creditos_extrato`. RLS ligado: o navegador nunca escreve direto; tudo passa pelo backend.
+- **Créditos:** função `mover_creditos` debita/credita numa única operação (saldo nunca fica negativo, pagamento repetido não credita 2x).
+- **Login:** Supabase Auth pelo backend (`/api/auth/*`), token guardado no navegador e renovado sozinho.
+- **Marca:** onboarding em 3 passos (negócio, visual, jeito de escrever). A IA usa a marca em todo carrossel e roteiro.
+- **Planos:** Start R$97/150 cr · Pro R$147/300 · Ultra R$247/500 (editáveis na tabela `planos`). Assinatura mensal no cartão via Mercado Pago (preapproval) + webhook `/api/webhooks/mercadopago`.
+- **Preço em créditos:** carrossel 2 · edição 5 · avatar 45/min (mín. 10) · avatar extra 30 · roteiro grátis.
+- **Sem chaves:** roda local com usuário demo; o Painel de teste simula o pagamento.

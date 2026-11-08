@@ -4,10 +4,18 @@ const MODEL = process.env.CLAUDE_MODEL || 'claude-haiku-5-5';
 const PRECO_IN = Number(process.env.PRECO_IN_MTOK || 1);
 const PRECO_OUT = Number(process.env.PRECO_OUT_MTOK || 5);
 
-function prompt({ tema, nicho, tom, qtd }) {
+// Contexto da marca do cliente (vem do onboarding) para a IA escrever do jeito dele
+function contextoMarca(m) {
+  if (!m) return '';
+  const l = [m.nome && `Marca: ${m.nome}`, m.descricao && `Sobre o negócio: ${m.descricao}`, m.publico && `Público: ${m.publico}`,
+    m.estilo_escrita && `Exemplo do jeito que a marca escreve (imite o estilo, não copie): "${String(m.estilo_escrita).slice(0, 600)}"`].filter(Boolean);
+  return l.length ? '\n' + l.join('\n') : '';
+}
+
+function prompt({ tema, nicho, tom, qtd, marca }) {
   return `Você é um copywriter de Instagram brasileiro especialista em carrosséis que viralizam.
 Crie um carrossel com EXATAMENTE ${qtd} slides sobre: "${tema}".
-Nicho: ${nicho || 'geral'}. Tom: ${tom || 'direto'}.
+Nicho: ${nicho || 'geral'}. Tom: ${tom || 'direto'}.${contextoMarca(marca)}
 Regras:
 - Slide 1: gancho forte (curiosidade, número ou dor), título com no máx. 8 palavras.
 - Slides do meio: 1 ideia por slide, título curto + texto de no máx. 30 palavras, prático.
@@ -57,7 +65,7 @@ async function gerarCarrossel(params) {
 }
 
 // Roteiro falado para o avatar (Reels de 20–60 s)
-async function gerarRoteiroAvatar({ tema, nicho, tom, segundos = 30 }) {
+async function gerarRoteiroAvatar({ tema, nicho, tom, segundos = 30, marca }) {
   if (!tema || !String(tema).trim()) throw Object.assign(new Error('Informe o tema'), { status: 400 });
   const palavras = Math.round(Math.min(60, Math.max(15, Number(segundos) || 30)) * 2.6);
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -67,7 +75,7 @@ async function gerarRoteiroAvatar({ tema, nicho, tom, segundos = 30 }) {
     method: 'POST',
     headers: { 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({ model: MODEL, max_tokens: 700, messages: [{ role: 'user', content:
-`Escreva o roteiro FALADO de um Reels sobre "${tema}" (nicho: ${nicho || 'geral'}, tom: ${tom || 'direto'}), com cerca de ${palavras} palavras.
+`Escreva o roteiro FALADO de um Reels sobre "${tema}" (nicho: ${nicho || 'geral'}, tom: ${tom || 'direto'}), com cerca de ${palavras} palavras.${contextoMarca(marca)}
 Primeira frase = gancho forte. Frases curtas, linguagem falada do Brasil, 1 dado numérico se fizer sentido, termina com CTA.
 Responda SOMENTE com o texto que será falado, sem títulos, marcações ou emojis.` }] })
   });

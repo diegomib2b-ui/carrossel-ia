@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sua marca · deep cut</title>
+<link rel="icon" href="/marca/icone.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/base.css">
+<style>
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:1px solid var(--borda)}
+.passos{font-family:var(--mono);font-size:12px;color:var(--sub);letter-spacing:1px}
+.barra{height:3px;background:var(--borda)}.barra i{display:block;height:100%;background:var(--lima);width:33%;transition:width .4s cubic-bezier(.6,0,.3,1)}
+main{max-width:1060px;margin:0 auto;padding:36px 24px 60px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:start}
+.etapa{display:none}.etapa.on{display:block;animation:entra .3s ease-out}
+.etapa h1{margin:10px 0 6px}
+.campos{display:grid;gap:16px;margin-top:22px}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.acoes{display:flex;gap:10px;margin-top:26px;justify-content:space-between}
+.arquivo{display:flex;align-items:center;gap:12px;border:1px dashed var(--borda);border-radius:12px;padding:12px;cursor:pointer;font-size:14px;color:var(--sub)}
+.arquivo img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:var(--campo);flex:0 0 auto}.arquivo img:not([src]){visibility:visible;opacity:0}
+.arquivo input{display:none}
+/* prévia ao vivo */
+.previa{position:sticky;top:24px}
+.slide{aspect-ratio:4/5;border-radius:18px;border:1px solid var(--borda);padding:22px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(120% 80% at 0% 0%,color-mix(in srgb,var(--cor,#c6ff3d) 18%,#0a0a0c) 0%,#0a0a0c 60%);overflow:hidden}
+.slide .topo{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.slide .topo img{width:30px;height:30px;border-radius:99px;object-fit:cover;background:#222}
+.slide h3{font-size:30px;line-height:1.05;letter-spacing:-1px;font-weight:900}
+.slide mark{background:var(--cor,#c6ff3d);color:#111;padding:0 6px;border-radius:6px}
+.slide .rod{display:flex;justify-content:space-between;font-size:11px;color:#b7b7bf}
+.previa p{margin-top:12px;text-align:center}
+@media(max-width:860px){main{grid-template-columns:1fr;padding:22px 16px 40px}.previa{position:static;order:-1;max-width:260px;margin:0 auto}.dois{grid-template-columns:1fr}.acoes .btn{flex:1}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="/" aria-label="deep cut">deep<span class="cut"><span class="ghost">cut</span><span class="a">cut</span><span class="b">cut</span><span class="risco"></span></span></a><span class="passos" id="passoTxt">PASSO 1 DE 3</span></header>
+<div class="barra"><i id="barra"></i></div>
+<main>
+  <section>
+    <div class="etapa on" data-e="1">
+      <div class="rot">// SEU NEGÓCIO</div>
+      <h1>Conta pra gente sobre a sua marca</h1>
+      <p class="muted">A IA usa isso em todo conteúdo: tema, linguagem e exemplos certos pro seu público.</p>
+      <div class="campos">
+        <div><label>Nome da marca</label><input id="nome" placeholder="Ex.: Michalis Gastronomia"></div>
+        <div><label>Nicho</label><div class="chips" id="nichos"></div><input id="nichoOutro" class="hide" style="margin-top:10px" placeholder="Qual é o seu nicho?"></div>
+        <div><label>O que você vende ou faz? (1 ou 2 frases)</label><textarea id="descricao" placeholder="Ex.: Buffet para casamentos e eventos em Curitiba, com cardápio autoral."></textarea></div>
+        <div><label>Pra quem? (público)</label><input id="publico" placeholder="Ex.: noivos de 25 a 40 anos"></div>
+      </div>
+    </div>
+    <div class="etapa" data-e="2">
+      <div class="rot">// VISUAL</div>
+      <h1>Como a sua marca aparece</h1>
+      <p class="muted">Cores, @ e logo entram automaticamente nos carrosséis e vídeos.</p>
+      <div class="campos">
+        <div class="dois"><div><label>@ do Instagram</label><input id="handle" placeholder="@suamarca"></div><div><label>Cor de destaque</label><input type="color" id="cor" value="#c6ff3d"></div></div>
+        <div class="dois">
+          <label class="arquivo"><img id="logoPrev" alt=""><span>Enviar logo<br><small>PNG, JPG ou SVG · opcional</small></span><input type="file" id="logo" accept="image/*"></label>
+          <label class="arquivo"><img id="fotoPrev" alt=""><span>Sua foto de perfil<br><small>opcional</small></span><input type="file" id="foto" accept="image/*"></label>
+        </div>
+      </div>
+    </div>
+    <div class="etapa" data-e="3">
+      <div class="rot">// JEITO DE ESCREVER</div>
+      <h1>Como a sua marca fala</h1>
+      <p class="muted">Escolha o tom. Se quiser, cole uma legenda que você já postou: a IA imita o estilo (sem copiar).</p>
+      <div class="campos">
+        <div><label>Tom</label><div class="chips" id="tons"></div></div>
+        <div><label>Um texto seu (opcional)</label><textarea id="estilo" style="min-height:140px" placeholder="Cole aqui uma legenda ou post seu"></textarea></div>
+      </div>
+    </div>
+    <div class="acoes"><button class="btn fantasma" id="voltar">← Voltar</button><button class="btn" id="seguir">Continuar →</button></div>
+    <div id="msg" class="status erro hide"></div>
+  </section>
+  <aside class="previa">
+    <div class="slide" id="slide"><div class="topo"><img id="pvFoto" alt=""><span id="pvHandle">@suamarca</span></div>
+      <h3 id="pvTitulo">O que ninguém te conta sobre <mark>sua área</mark></h3>
+      <div class="rod"><span id="pvNome">Sua marca</span><span>arrasta →</span></div></div>
+    <p class="muted">Prévia de como seus carrosséis vão sair</p>
+  </aside>
+</main>
+<script src="/js/sessao.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const NICHOS = ['Gastronomia', 'Beleza e estética', 'Saúde e bem-estar', 'Moda', 'Educação', 'Finanças', 'Imóveis', 'Eventos', 'Marketing', 'Tecnologia', 'Outro'];
+const TONS = { direto: 'Direto', descontraido: 'Descontraído', tecnico: 'Técnico', inspirador: 'Inspirador', vendedor: 'Vendedor' };
+let etapa = 1, nicho = '', tom = 'direto';
+const arquivos = {};
+function chips(el, itens, sel, onSel) {
+  el.innerHTML = itens.map(([k, v]) => `<button type="button" class="chip ${k === sel ? 'on' : ''}" data-k="${k}">${v}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(b => b.onclick = () => { onSel(b.dataset.k); chips(el, itens, b.dataset.k, onSel); });
+}
+chips($('nichos'), NICHOS.map(n => [n, n]), nicho, k => { nicho = k; $('nichoOutro').classList.toggle('hide', k !== 'Outro'); previa(); });
+chips($('tons'), Object.entries(TONS), tom, k => tom = k);
+function previa() {
+  const n = nicho === 'Outro' ? $('nichoOutro').value : nicho;
+  $('pvTitulo').innerHTML = `O que ninguém te conta sobre <mark>${(n || 'sua área').toLowerCase().replace(/[<>&]/g, '')}</mark>`;
+  $('pvHandle').textContent = $('handle').value ? '@' + $('handle').value.replace(/^@+/, '') : '@suamarca';
+  $('pvNome').textContent = $('nome').value || 'Sua marca';
+  $('slide').style.setProperty('--cor', $('cor').value);
+}
+['nome', 'handle', 'cor', 'nichoOutro'].forEach(i => $(i).addEventListener('input', previa));
+['logo', 'foto'].forEach(k => $(k).onchange = () => {
+  const f = $(k).files[0]; if (!f) return; arquivos[k] = f;
+  const u = URL.createObjectURL(f); $(k + 'Prev').src = u;
+  if (k === 'foto' || !arquivos.foto) $('pvFoto').src = u;
+});
+function ir(n) {
+  etapa = n;
+  document.querySelectorAll('.etapa').forEach(e => e.classList.toggle('on', +e.dataset.e === n));
+  $('passoTxt').textContent = `PASSO ${n} DE 3`; $('barra').style.width = (n / 3 * 100) + '%';
+  $('voltar').style.visibility = n === 1 ? 'hidden' : 'visible';
+  $('seguir').textContent = n === 3 ? 'Começar a criar →' : 'Continuar →';
+  $('msg').classList.add('hide');
+}
+$('voltar').onclick = () => ir(Math.max(1, etapa - 1));
+$('seguir').onclick = async () => {
+  if (etapa === 1 && !$('nome').value.trim()) { $('msg').textContent = '⚠ Informe o nome da marca'; return $('msg').classList.remove('hide'); }
+  if (etapa < 3) return ir(etapa + 1);
+  const fd = new FormData();
+  const campos = { nome: $('nome').value, nicho: nicho === 'Outro' ? $('nichoOutro').value : nicho, descricao: $('descricao').value, publico: $('publico').value,
+    handle: $('handle').value, cor: $('cor').value, tom, estilo_escrita: $('estilo').value, concluir: 'true' };
+  Object.entries(campos).forEach(([k, v]) => fd.append(k, v));
+  Object.entries(arquivos).forEach(([k, f]) => fd.append(k, f));
+  $('seguir').disabled = true;
+  try { await DC.api('/api/marca', { method: 'POST', body: fd }); location.href = '/app'; }
+  catch (e) { $('msg').textContent = '⚠ ' + e.message; $('msg').classList.remove('hide'); }
+  finally { $('seguir').disabled = false; }
+};
+(async () => {
+  if (!await DC.exigirLogin()) return;
+  const me = await DC.api('/api/me');
+  const m = me.marca;
+  if (m) {
+    $('nome').value = m.nome || ''; $('descricao').value = m.descricao || ''; $('publico').value = m.publico || '';
+    $('handle').value = (m.handle || '').replace(/^@/, ''); $('cor').value = m.cor || '#c6ff3d'; $('estilo').value = m.estilo_escrita || '';
+    if (m.nicho) { nicho = NICHOS.includes(m.nicho) ? m.nicho : 'Outro'; if (nicho === 'Outro') { $('nichoOutro').value = m.nicho; $('nichoOutro').classList.remove('hide'); } chips($('nichos'), NICHOS.map(n => [n, n]), nicho, k => { nicho = k; $('nichoOutro').classList.toggle('hide', k !== 'Outro'); previa(); }); }
+    if (m.tom) { tom = m.tom; chips($('tons'), Object.entries(TONS), tom, k => tom = k); }
+    if (m.logo_url) $('logoPrev').src = m.logo_url;
+    if (m.foto_url || m.logo_url) $('pvFoto').src = m.foto_url || m.logo_url;
+  }
+  ir(1); previa();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrar · deep cut</title>
+<link rel="icon" href="/marca/icone.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/base.css">
+<style>
+body{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.lado{position:relative;padding:40px 56px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(700px 400px at 30% 20%,rgba(198,255,61,.10),transparent 60%),radial-gradient(600px 400px at 80% 100%,rgba(255,61,90,.08),transparent 60%);border-right:1px solid var(--borda)}
+.lado h2{font-size:44px;line-height:1.02;letter-spacing:-2px;font-weight:900;max-width:440px}
+.lado h2 s{color:var(--sub);text-decoration-color:var(--corte);text-decoration-thickness:5px}
+.lado h2 em{font-style:normal;color:var(--lima)}
+.lista{margin-top:22px;display:grid;gap:10px;color:#b7b7bf;font-size:15px}.lista span{color:var(--lima);font-family:var(--mono);margin-right:8px}
+.form{display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.caixa{width:100%;max-width:400px}
+.abas{display:flex;background:var(--card);border:1px solid var(--borda);border-radius:99px;padding:5px;margin:22px 0}
+.abas button{flex:1;background:none;border:1px solid transparent;color:var(--sub);padding:10px;border-radius:99px;font:inherit;font-size:15px;cursor:pointer}
+.abas button.on{background:var(--limaEsc);border-color:var(--limaBorda);color:var(--lima)}
+.campo{margin-bottom:14px}
+.btn{width:100%;margin-top:6px}
+.rodape{font-family:var(--mono);font-size:12px;color:var(--sub)}
+@media(max-width:860px){body{grid-template-columns:1fr}.lado{padding:28px 22px;border-right:0;border-bottom:1px solid var(--borda)}.lado h2{font-size:30px;margin-top:18px}.lista,.lado .rodape{display:none}.form{padding:28px 20px 40px;align-items:flex-start}}
+</style>
+</head>
+<body>
+<aside class="lado">
+  <a class="logo" href="/" aria-label="deep cut">deep<span class="cut"><span class="ghost">cut</span><span class="a">cut</span><span class="b">cut</span><span class="risco"></span></span></a>
+  <div><h2>Seu conteúdo sem <s>enrolação</s>, <em>pronto em 1 clique.</em></h2>
+    <div class="lista"><div><span>01</span>Carrossel com a cara da sua marca</div><div><span>02</span>Reels com seu avatar e sua voz</div><div><span>03</span>Vídeo editado sem as pausas</div></div></div>
+  <div class="rodape">30 créditos grátis pra testar · sem cartão</div>
+</aside>
+<main class="form"><div class="caixa">
+  <h1 id="titulo">Crie sua conta</h1>
+  <p class="muted" id="subtitulo">Leva 1 minuto. Depois a gente pergunta sobre a sua marca.</p>
+  <div class="abas"><button data-m="cadastro" class="on">Criar conta</button><button data-m="entrar">Entrar</button></div>
+  <form id="f">
+    <div class="campo" id="cNome"><label>Seu nome</label><input id="nome" autocomplete="name" placeholder="Como podemos te chamar?"></div>
+    <div class="campo"><label>E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com" required></div>
+    <div class="campo"><label>Senha</label><input id="senha" type="password" autocomplete="new-password" placeholder="Pelo menos 8 caracteres" required minlength="8"></div>
+    <button class="btn" id="enviar">Criar conta e começar →</button>
+  </form>
+  <div id="msg" class="status erro hide"></div>
+</div></main>
+<script src="/js/sessao.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let modo = 'cadastro';
+function trocar(m) {
+  modo = m;
+  document.querySelectorAll('.abas button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  $('cNome').classList.toggle('hide', m === 'entrar');
+  $('titulo').textContent = m === 'entrar' ? 'Bem-vindo de volta' : 'Crie sua conta';
+  $('subtitulo').textContent = m === 'entrar' ? 'Entre para continuar cortando.' : 'Leva 1 minuto. Depois a gente pergunta sobre a sua marca.';
+  $('enviar').textContent = m === 'entrar' ? 'Entrar →' : 'Criar conta e começar →';
+  $('senha').autocomplete = m === 'entrar' ? 'current-password' : 'new-password';
+  $('msg').classList.add('hide');
+}
+document.querySelectorAll('.abas button').forEach(b => b.onclick = () => trocar(b.dataset.m));
+if (new URLSearchParams(location.search).has('entrar')) trocar('entrar');
+$('f').onsubmit = async e => {
+  e.preventDefault(); $('enviar').disabled = true; $('msg').classList.add('hide');
+  try {
+    const s = await DC.api('/api/auth/' + modo, { method: 'POST', body: { nome: $('nome').value, email: $('email').value, senha: $('senha').value } });
+    DC.gravar(s);
+    const me = await DC.api('/api/me');
+    location.href = me.onboarding_ok ? (new URLSearchParams(location.search).get('volta') || '/app') : '/boas-vindas';
+  } catch (er) { $('msg').textContent = '⚠ ' + er.message; $('msg').classList.remove('hide'); }
+  finally { $('enviar').disabled = false; }
+};
+</script>
+</body>
+</html>

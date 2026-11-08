@@ -28,7 +28,15 @@ a{color:inherit;text-decoration:none}
 nav{position:sticky;top:0;z-index:10;background:rgba(10,10,12,.85);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
 nav.rolou{border-color:var(--borda)}
 nav .wrap{display:flex;justify-content:space-between;align-items:center;height:76px}
-.links{display:flex;gap:30px;color:var(--sub);font-size:15px}.links a:hover{color:var(--txt)}
+.links{display:flex;gap:30px;color:var(--sub);font-size:15px}.links a:hover,.entrar:hover{color:var(--txt)}.entrar{color:var(--sub);font-size:15px}
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.plano{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:14px;position:relative}
+.plano.destaque{border-color:#3d4a1a;background:linear-gradient(180deg,#151a0b,var(--card))}
+.plano .selo{position:absolute;top:-11px;left:24px;background:var(--lima);color:#0a0a0c;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;letter-spacing:.5px}
+.plano h3{font-size:20px}.preco{font-size:44px;font-weight:900;letter-spacing:-2px}.preco small{font-size:15px;color:var(--sub);font-weight:400;letter-spacing:0}
+.plano ul{list-style:none;padding:0;display:grid;gap:9px;color:#c9c9cf;font-size:15px}.plano li:before{content:"✓ ";color:var(--lima)}
+.plano .btn{justify-content:center;margin-top:auto}.plano .btn.sec{background:#1b1f12;color:#e6ffb0;border:1px solid #3d4a1a}
+.nota{margin-top:18px;color:var(--sub);font-size:14px;font-family:var(--mono)}
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--lima);color:#0a0a0c;font-weight:800;border-radius:10px;padding:13px 22px;font-size:15px;transition:transform .15s,box-shadow .15s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(198,255,61,.2)}
 .btn.grande{font-size:16px;padding:16px 26px}
@@ -90,6 +98,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .revela.vis{opacity:1;transform:none}
 
 @media(max-width:900px){
+  .planos{grid-template-columns:1fr}.entrar{display:none}
   .wrap{padding:0 20px}.links{display:none}
   .hero .wrap{grid-template-columns:1fr;padding-top:30px;padding-bottom:60px}
   h1{font-size:38px;letter-spacing:-1.5px}.sub{font-size:16px}
@@ -104,8 +113,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <body>
 <nav id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="deep cut">deep<span class="cut"><span class="ghost">cut</span><span class="a">cut</span><span class="b">cut</span><span class="risco"></span></span></a>
-  <div class="links"><a href="#recursos">Carrossel</a><a href="#recursos">Avatar</a><a href="#recursos">Edição</a><a href="#numeros">Como funciona</a></div>
-  <a class="btn" href="/app">Começar grátis →</a>
+  <div class="links"><a href="#recursos">Carrossel</a><a href="#recursos">Avatar</a><a href="#recursos">Edição</a><a href="#numeros">Como funciona</a><a href="#precos">Preços</a></div>
+  <div style="display:flex;gap:18px;align-items:center"><a href="/entrar?entrar" class="entrar">Entrar</a><a class="btn" href="/entrar">Começar grátis →</a></div>
 </div></nav>
 
 <header class="hero"><div class="brilho"></div><div class="wrap">
@@ -113,7 +122,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="tagline">// CORTA O QUE NÃO PRESTA</div>
     <h1>Seu conteúdo sem <span class="riscada">enrolação</span>, <em>pronto em 1&nbsp;clique.</em></h1>
     <p class="sub">Carrossel, Reels com seu avatar e edição automática. A deep cut corta as pausas, escreve, legenda e entrega o post pronto pro seu Instagram.</p>
-    <div class="acoes"><a class="btn grande" href="/app">Criar meu primeiro corte →</a><a class="ghostbtn" href="#recursos">Ver como funciona</a></div>
+    <div class="acoes"><a class="btn grande" href="/entrar">Criar meu primeiro corte →</a><a class="ghostbtn" href="#recursos">Ver como funciona</a></div>
     <div class="mini">50 créditos grátis pra testar · sem cartão</div>
   </div>
   <div class="fone">
@@ -144,14 +153,31 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></section>
 
+<section class="bloco" id="precos"><div class="wrap">
+  <div class="rot revela">// PREÇOS</div>
+  <h2 class="revela">Um plano, todos os cortes. <em>Sem fidelidade.</em></h2>
+  <div class="planos" id="planos"></div>
+  <p class="nota revela">1 carrossel = 2 créditos · vídeo editado = 5 · avatar = 45 por minuto · comece com 30 créditos grátis</p>
+</div></section>
+
 <section class="bloco final"><div class="wrap">
   <h2 class="revela">Corta a enrolação. <em>Posta hoje.</em></h2>
-  <div class="acoes revela" style="margin-top:30px"><a class="btn grande" href="/app">Começar grátis →</a></div>
+  <div class="acoes revela" style="margin-top:30px"><a class="btn grande" href="/entrar">Começar grátis →</a></div>
 </div></section>
 
 <footer><div class="wrap"><span>deep cut · 2026</span><span>Ajuda no WhatsApp · Privacidade · Termos</span></div></footer>
 
 <script>
+// Planos vêm do banco (mudou o preço no Supabase, muda aqui)
+fetch('/api/planos').then(r => r.json()).then(ps => {
+  const brl = c => (c / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace(',00', '');
+  document.getElementById('planos').innerHTML = ps.map(p => `<div class="plano revela ${p.id === 'pro' ? 'destaque' : ''}">${p.id === 'pro' ? '<span class="selo">MAIS ESCOLHIDO</span>' : ''}
+    <h3>${p.nome}</h3><div class="preco">${brl(p.preco_centavos)}<small>/mês</small></div>
+    <ul><li>${p.creditos_mes} créditos por mês</li><li>até ${Math.floor(p.creditos_mes / 2)} carrosséis</li><li>ou ~${Math.floor(p.creditos_mes / 45)} min de avatar</li><li>Cartão · cancele quando quiser</li></ul>
+    <a class="btn ${p.id === 'pro' ? '' : 'sec'}" href="/entrar">Começar com o ${p.nome} →</a></div>`).join('');
+  document.querySelectorAll('#planos .revela').forEach(el => io.observe(el));
+}).catch(() => {});
+
 // Barra do menu ganha borda ao rolar
 addEventListener('scroll', () => document.getElementById('nav').classList.toggle('rolou', scrollY > 10), { passive: true });
 

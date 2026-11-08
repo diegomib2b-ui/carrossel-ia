@@ -17,6 +17,7 @@ const upload = multer({ dest: path.join(store.DATA_DIR, 'uploads'), limits: { fi
 const id = () => crypto.randomBytes(5).toString('hex');
 
 app.use(express.json());
+app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public', 'app.html')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/out', express.static(OUT));
 
@@ -32,7 +33,7 @@ app.post('/api/creditos/reset', (req, res) => { store.resetCreditos(); res.json(
 
 // Gera carrossel (1 crédito)
 app.post('/api/carrossel', async (req, res) => {
-  const { tema, nicho, tom, qtd, template = 'escuro', cor = '#ffe95c', handle = '@seuperfil' } = req.body || {};
+  const { tema, nicho, tom, qtd, template = 'escuro', cor = '#c6ff3d', handle = '@seuperfil' } = req.body || {};
   if (!tema || !tema.trim()) return res.status(400).json({ erro: 'Informe o tema' });
   let debitado = false;
   try {
@@ -85,7 +86,7 @@ app.post('/api/video', upload.single('video'), async (req, res) => {
   res.json({ ...g, saldo: store.usuario().creditos });
   try {
     const r = await editarVideo({ entrada: req.file.path, outDir: path.join(OUT, gid),
-      cortarSilencio: b.cortarSilencio !== 'false', legendas: b.legendas !== 'false', roteiro: b.roteiro, cor: b.cor || '#ffe95c' });
+      cortarSilencio: b.cortarSilencio !== 'false', legendas: b.legendas !== 'false', roteiro: b.roteiro, cor: b.cor || '#c6ff3d' });
     store.atualizar(gid, { status: 'pronto', custo_usd: r.custo_usd, dados: { ...g.dados, url: `/out/${gid}/${r.arquivo}`, log: r.log } });
   } catch (e) {
     store.estornar('demo', 'video');
@@ -142,7 +143,7 @@ app.post('/api/avatar/audio', async (req, res) => {
 
 // Gera o vídeo do avatar (créditos pela duração; roda em segundo plano)
 app.post('/api/avatar/video', async (req, res) => {
-  const { audioId, estilo = 'classico', cor = '#ffe95c' } = req.body || {};
+  const { audioId, estilo = 'classico', cor = '#c6ff3d' } = req.body || {};
   const aud = store.buscarAudio(audioId);
   if (!aud) return res.status(404).json({ erro: 'Gere o áudio antes' });
   const a = store.buscarAvatar(aud.avatar_id);
@@ -165,4 +166,4 @@ app.post('/api/avatar/video', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3400;
-app.listen(PORT, () => console.log(`Carrossel IA rodando em http://localhost:${PORT}  (IA: ${process.env.ANTHROPIC_API_KEY ? 'Claude' : 'demo'})`));
+app.listen(PORT, () => console.log(`deep cut rodando em http://localhost:${PORT}  (IA: ${process.env.ANTHROPIC_API_KEY ? 'Claude' : 'demo'})`));

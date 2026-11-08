@@ -148,7 +148,7 @@ const ESTILOS = {
   dados: 'Dados — números falados aparecem gigantes'
 };
 
-async function montarVideo({ avatar, avatarDir, audio, audioDir, estilo = 'classico', cor = '#ffe95c', outDir }) {
+async function montarVideo({ avatar, avatarDir, audio, audioDir, estilo = 'classico', cor = '#c6ff3d', outDir }) {
   fs.mkdirSync(outDir, { recursive: true });
   const foto = path.join(avatarDir, avatar.foto), mp3 = path.join(audioDir, audio.arquivo);
   const base = path.join(outDir, 'base.mp4');

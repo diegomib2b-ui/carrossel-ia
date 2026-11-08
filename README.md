@@ -1,4 +1,14 @@
-# Carrossel IA — Fase 1 (MVP estilo Qorvo)
+# deep cut
+
+Conteúdo sem enrolação: carrossel com IA, Reels com avatar e edição que corta as pausas.
+
+- Site: `http://localhost:3400/`
+- App: `http://localhost:3400/app`
+- Marca: `public/marca/` (ícone, foto de perfil 1080, logo animado)
+
+## Identidade
+Preto `#0A0A0C` · Grafite `#141417` · Lima `#C6FF3D` (ação) · Vermelho `#FF3D5A` (o que foi cortado) · Osso `#F4F4F2`. Inter Black nos títulos, JetBrains Mono nos dados.
+
 
 Carrossel com IA + edição de vídeo (corta silêncios e põe legendas no estilo Reels), com créditos e um painel de teste.
 
@@ -7,7 +17,7 @@ Carrossel com IA + edição de vídeo (corta silêncios e põe legendas no estil
 npm install
 cp .env.example .env   # opcional: coloque as chaves
 node --env-file=.env server.js
-# abra http://localhost:3400
+# site em http://localhost:3400 · app em http://localhost:3400/app
 ```
 Precisa ter Chrome/Chromium (CHROME_PATH) e FFmpeg instalados.
 
@@ -27,7 +37,8 @@ Precisa ter Chrome/Chromium (CHROME_PATH) e FFmpeg instalados.
 - `src/video.js`: corte de silêncio, transcrição e legenda ASS queimada no vídeo (FFmpeg)
 - `src/avatar.js`: avatar com IA (clonar voz, áudio com tempo por palavra, lip-sync, legenda nos estilos Clássico/Gancho/Dados)
 - `src/store.js`: créditos e histórico em JSON (pronto para migrar ao Supabase)
-- `public/index.html`: app + painel de teste
+- `public/index.html`: site (landing com animações)
+- `public/app.html`: app + painel de teste
 
 ## API
 - `GET /api/me`: créditos e integrações

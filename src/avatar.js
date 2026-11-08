@@ -98,9 +98,10 @@ async function lipsyncFal(fotoPath, audioPath) {
     await new Promise(ok => setTimeout(ok, 3000));
     const s = await (await fetch(status_url, { headers: auth })).json();
     if (s.status === 'COMPLETED') break;
-    if (s.status === 'FAILED' || s.error) throw new Error('fal.ai falhou: ' + JSON.stringify(s).slice(0, 300));
+    if (s.status === 'FAILED' || s.error || s.detail) throw new Error('fal.ai falhou: ' + JSON.stringify(s).slice(0, 300));
   }
   const res = await (await fetch(response_url, { headers: auth })).json();
+  if (res.detail) throw new Error('fal.ai: ' + JSON.stringify(res.detail).slice(0, 300));
   const url = res.video?.url;
   if (!url) throw new Error('fal.ai não devolveu vídeo: ' + JSON.stringify(res).slice(0, 300));
   const v = await fetch(url);
@@ -148,7 +149,7 @@ const ESTILOS = {
   dados: 'Dados — números falados aparecem gigantes'
 };
 
-async function montarVideo({ avatar, avatarDir, audio, audioDir, estilo = 'classico', cor = '#ffe95c', outDir }) {
+async function montarVideo({ avatar, avatarDir, audio, audioDir, estilo = 'classico', cor = '#c6ff3d', outDir }) {
   fs.mkdirSync(outDir, { recursive: true });
   const foto = path.join(avatarDir, avatar.foto), mp3 = path.join(audioDir, audio.arquivo);
   const base = path.join(outDir, 'base.mp4');

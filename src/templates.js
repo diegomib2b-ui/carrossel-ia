@@ -4,12 +4,12 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 const destacar = s => esc(s).replace(/\*(.+?)\*/g, '<mark>$1</mark>');
 
 const TEMAS = {
-  escuro:   { bg: 'radial-gradient(120% 80% at 0% 0%, #2a1b5c 0%, #0d0b18 60%)', txt: '#ffffff', sub: '#b9b3d6', markBg: 'var(--cor)', markTxt: '#111' },
+  escuro:   { bg: 'radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--cor) 16%, #0a0a0c) 0%, #0a0a0c 60%)', txt: '#ffffff', sub: '#b7b7bf', markBg: 'var(--cor)', markTxt: '#111' },
   claro:    { bg: '#f7f5f0', txt: '#141414', sub: '#555', markBg: 'var(--cor)', markTxt: '#111' },
   colorido: { bg: 'linear-gradient(150deg, var(--cor) 0%, #7b4dff 55%, #ff7a45 100%)', txt: '#ffffff', sub: 'rgba(255,255,255,.85)', markBg: '#fff', markTxt: '#111' }
 };
 
-function slideHTML({ slide, i, total, template = 'escuro', cor = '#ffe95c', handle = '@seuperfil' }) {
+function slideHTML({ slide, i, total, template = 'escuro', cor = '#c6ff3d', handle = '@seuperfil' }) {
   const t = TEMAS[template] || TEMAS.escuro;
   const capa = i === 0, final = i === total - 1;
   return `<!doctype html><html><head><meta charset="utf-8"><style>

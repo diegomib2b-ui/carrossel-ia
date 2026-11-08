@@ -56,4 +56,24 @@ async function gerarCarrossel(params) {
   return out;
 }
 
-module.exports = { gerarCarrossel };
+// Roteiro falado para o avatar (Reels de 20–60 s)
+async function gerarRoteiroAvatar({ tema, nicho, tom, segundos = 30 }) {
+  if (!tema || !String(tema).trim()) throw Object.assign(new Error('Informe o tema'), { status: 400 });
+  const palavras = Math.round(Math.min(60, Math.max(15, Number(segundos) || 30)) * 2.6);
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return { roteiro: `${tema.charAt(0).toUpperCase() + tema.slice(1)}: presta atenção nesses 3 erros. Primeiro: demorar pra responder. 70% das pessoas desistem se a resposta passa de 1 hora. Segundo: não mostrar preço. Terceiro: não pedir a venda. Corrige esses 3 e me conta o resultado nos comentários.`, custo_usd: 0, fonte: 'demo' };
+  }
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify({ model: MODEL, max_tokens: 700, messages: [{ role: 'user', content:
+`Escreva o roteiro FALADO de um Reels sobre "${tema}" (nicho: ${nicho || 'geral'}, tom: ${tom || 'direto'}), com cerca de ${palavras} palavras.
+Primeira frase = gancho forte. Frases curtas, linguagem falada do Brasil, 1 dado numérico se fizer sentido, termina com CTA.
+Responda SOMENTE com o texto que será falado, sem títulos, marcações ou emojis.` }] })
+  });
+  if (!r.ok) throw new Error(`Claude API ${r.status}: ${await r.text()}`);
+  const d = await r.json();
+  return { roteiro: d.content.map(c => c.text || '').join('').trim(), custo_usd: (d.usage.input_tokens * PRECO_IN + d.usage.output_tokens * PRECO_OUT) / 1e6, fonte: MODEL };
+}
+
+module.exports = { gerarCarrossel, gerarRoteiroAvatar };

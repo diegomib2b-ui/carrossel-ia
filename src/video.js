@@ -131,4 +131,4 @@ async function editarVideo({ entrada, outDir, cortarSilencio = true, legendas = 
   return { arquivo: 'final.mp4', custo_usd: custo, log };
 }
 
-module.exports = { editarVideo };
+module.exports = { editarVideo, run, duracao, dimensoes, gerarASS, tempo, hexAss };
